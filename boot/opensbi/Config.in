@@ -64,15 +64,34 @@ config BR2_TARGET_OPENSBI_VERSION
 	default BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION \
 		if BR2_TARGET_OPENSBI_CUSTOM_GIT
 
-config BR2_TARGET_OPENSBI_PLAT
-	string "OpenSBI Platform"
-	default ""
+choice
+	prompt "OpenSBI Platform Type"
 	help
-	  Specifies the OpenSBI platform to build. If no platform is
-	  specified only the OpenSBI platform independent static
-	  library libsbi.a is built. If a platform is specified then
-	  the platform specific static library libplatsbi.a and firmware
-	  examples are built.
+	 Select if you'd like to use a reference platform included
+	 with OpenSBI, a platform from an external directory or, If
+	 "No Platform" is selected, just build the platform independent
+	 static libary libsbi.a.
+
+config BR2_TARGET_OPENSBI_PLAT_REF
+	bool "Reference Platform."
+
+config BR2_TARGET_OPENSBI_PLAT_EXT
+	bool "External Platform."
+
+config BR2_TARGET_OPENSBI_PLAT_NONE
+	bool "No Platform."
+
+endchoice
+
+config BR2_TARGET_OPENSBI_PLAT_REF_NAME
+	string "OpenSBI Reference Platform"
+	depends on BR2_TARGET_OPENSBI_PLAT_REF
+	default ""
+
+config BR2_TARGET_OPENSBI_PLAT_EXT_DIR
+	string "OpenSBI External Platform Directory - please omit trailing slash."
+	depends on BR2_TARGET_OPENSBI_PLAT_EXT
+	default ""
 
 config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
 	bool "Install fw_dynamic image"
